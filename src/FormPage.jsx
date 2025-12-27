@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 function FormPage() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(
+    JSON.parse(localStorage.getItem("users")) || []
+  );
   const [data, setData] = useState({
     name: "",
     mobile: "",
@@ -17,7 +19,7 @@ function FormPage() {
 
   const formSubmit = (e) => {
     e.preventDefault();
-    setUsers((prev) => [...prev, data]);
+    setUsers([...users, data]);
     setData({
       name: "",
       mobile: "",
@@ -29,7 +31,6 @@ function FormPage() {
 
   useEffect(() => {
     localStorage.setItem("users", JSON.stringify(users));
-    console.log(users);
   }, [users]);
 
   return (
@@ -39,7 +40,6 @@ function FormPage() {
         padding: "40px",
         borderRadius: "20px",
       }}
-      onSubmit={(e) => formSubmit(e)}
     >
       <form
         style={{
@@ -49,6 +49,7 @@ function FormPage() {
           width: "280px",
           textAlign: "start",
         }}
+        onSubmit={(e) => formSubmit(e)}
       >
         <label htmlFor="">Name :</label>
         <input

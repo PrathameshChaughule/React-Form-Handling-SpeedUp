@@ -1,14 +1,20 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function DataPage() {
-  const [usersData, setUsersData] = useState();
+  const [usersData, setUsersData] = useState([]);
   const nav = useNavigate();
 
   useEffect(() => {
     const users = JSON.parse(localStorage.getItem("users")) || [];
     setUsersData(users);
   }, []);
+
+  const dataDelete = (index) => {
+    const dataUpdate = usersData.filter((val, i) => i !== index);
+    setUsersData(dataUpdate);
+    localStorage.setItem("users", JSON.stringify(dataUpdate));
+  };
 
   return (
     <div
@@ -21,7 +27,7 @@ function DataPage() {
         gap: "20px",
       }}
     >
-      <button onClick={() => nav("/")}>Back To Form</button>
+      <button onClick={() => nav(`/`)}>Back To Form</button>
       <div
         style={{
           display: "flex",
@@ -64,10 +70,14 @@ function DataPage() {
                 justifyContent: "space-between",
               }}
             >
-              <button style={{ padding: "7px 30px", fontSize: "1.2rem" }}>
+              <button
+                onClick={() => formEdit(index)}
+                style={{ padding: "7px 30px", fontSize: "1.2rem" }}
+              >
                 Edit
               </button>
               <button
+                onClick={() => dataDelete(index)}
                 style={{
                   padding: "7px 30px",
                   fontSize: "1.2rem",
